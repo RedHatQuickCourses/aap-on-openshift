@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Modify the default AAP container group :: Product Enablement: Ansible Automation Platform Operator Deployment</title>
+    <link rel="prev" href="section4.html">
+    <link rel="next" href="section6.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/vendor/tabs.css">
+    <link rel="stylesheet" href="../../../_/css/vendor/collapsible.css">
+    <link rel="stylesheet" href="../../../_/css/vendor/reading-time.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">Product Enablement: Ansible Automation Platform Operator Deployment</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/aap-on-openshift/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="aap-on-openshift" data-version="1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Product Enablement: Ansible Automation Platform Operator Deployment</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../LABENV/index.html">Lab Environment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Module 1 Lab 3: Platform - Ansible Automation Platform on OpenShift</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section1.html">Introduction: Why AAP on OpenShift?</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section2.html">Viewing the AAP on OpenShift managed resources</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section3.html">Deploy another AAP instance using the AAP Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section4.html">Modify the existing deployment</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="section5.html">Modify the default AAP container group</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.html">Conclusion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="tabs-demo.html">Tabbed code blocks</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="collapsible-demo.html">Collapsible blocks</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../chapter2/index.html">Module 2 Lab 5: Content - Configuration as Code</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter2/section1.html">Section 1</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../chapter3/index.html">Chapter 3</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter3/section1.html">Section 1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter3/section2.html">Section 2</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../appendix/appendix.html">Appendix</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Product Enablement: Ansible Automation Platform Operator Deployment</span>
+    <span class="version">1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Product Enablement: Ansible Automation Platform Operator Deployment</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Product Enablement: Ansible Automation Platform Operator Deployment</a></li>
+    <li><a href="index.html">Module 1 Lab 3: Platform - Ansible Automation Platform on OpenShift</a></li>
+    <li><a href="section5.html">Modify the default AAP container group</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Modify the default AAP container group</h1>
+<div class="paragraph">
+<p>The operator deployed AAP instance is pre-configured with a default <a href="https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/using_automation_execution/controller-instance-and-container-groups#controller-container-groups" target="_blank" rel="noopener">Container Group</a>. A container group is an instance group that points to an OpenShift cluster. In this case, the OpenShift cluster that the operator was installed on.</p>
+</div>
+<div class="paragraph">
+<p>By default, the container group is setup to deploy job pods in the same namespace that the <code>AnsibleAutomationPlatform</code> custom resource was created within.</p>
+</div>
+<div class="paragraph">
+<p>AAP allows you to edit the default container group, or create new ones, and modify the Kubernetes request that AAP makes for each job execution.</p>
+</div>
+<div class="paragraph">
+<p>Before we modify the container group, let&#8217;s make a slight configuration change to the AAP deployment that will allow job containers to persist after running. This change allows us to observe the state of job pods after they have completed.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log into the <a href="https://aap-my-aap.{openshift_cluster_ingress_domain}" target="_blank" rel="noopener">deployed AAP instance</a>.</p>
+</li>
+<li>
+<p>From the navigation menu on the left, expand <strong>Settings</strong> and expand <strong>Automation Execution</strong> and click on <strong>Troubleshooting</strong>.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aap-settings-troubleshooting.png" alt="AAP Automation Execution Settings">
+</div>
+</div>
+</li>
+<li>
+<p>Click on the <strong>Edit</strong> button.</p>
+</li>
+<li>
+<p>Uncheck the <strong>Release Receptor Work</strong> checkbox.</p>
+</li>
+<li>
+<p>Click the <strong>Save</strong> button.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aap-receptor-work.png" alt="AAP Receptor Work Setting">
+</div>
+</div>
+<div class="paragraph">
+<p>Now, perform a small modification to the to the default container group on the deployed AAP instance.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>From the navigation menu on the left, expand <strong>Automation Execution</strong> and expand <strong>Infrastructure</strong> and click on <strong>Instance Groups</strong>.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aap-instance-groups.png" alt="AAP Instance Groups">
+</div>
+</div>
+</li>
+<li>
+<p>Click on the <strong>default</strong> container group.</p>
+</li>
+<li>
+<p>Click the <strong>Edit container group</strong> button.</p>
+</li>
+<li>
+<p>Check the <strong>Customize pod spec</strong> option.</p>
+</li>
+<li>
+<p>A <code>Pod spec override</code> text box appear once the <em>Customize pod spec</em> option is checked with a lengthy YAML snippet. This represents spec for the Kubernetes API request that is made by AAP each time a job pod is launched. Let&#8217;s modify the spec slightly to add a custom label to each job pod.</p>
+</li>
+<li>
+<p>Edit the <code>metadata</code> key to appear similar to the following:</p>
+<div class="listingblock execute">
+<div class="title">Custom AAP Deployment</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># ... other configuration
+metadata:
+  namespace: my-aap
+  labels:
+    ansible_job: ''
+    my_label: foobar<i class="conum" data-value="1"></i><b>(1)</b>
+# ... other configuration</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Add this line to the metadata key.</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Click the <strong>Save container group</strong> button.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aap-edit-instance-group.png" alt="Update Default Instance Group">
+</div>
+</div>
+</li>
+<li>
+<p>With the default instance group updated, let&#8217;s run a demo job and observe the job pod that is launched.</p>
+</li>
+<li>
+<p>From the navigation menu on the left, expand <strong>Automation Execution</strong> and click on <strong>Templates</strong>.</p>
+</li>
+<li>
+<p>Click on <strong>Demo Job Template</strong>.</p>
+</li>
+<li>
+<p>Click the <strong>Launch template</strong> button (rocket icon).</p>
+</li>
+<li>
+<p>Wait for the job to complete.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If the Job completes successfully, an OpenShift pod was launched and the ansible playbook was successfully executed within it. Normally, this pod would be terminated and removed upon success of the Job by AAP. However, because we unchecked the <code>Release Receptor Work</code> option previously, this pod will not be removed and will still be available for inspection as needed.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s observe the created job pod in the OpenShift Web Console.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate back to the OpenShift web console.</p>
+</li>
+<li>
+<p>Navigate to <strong>Workloads</strong> on the left hand navigation &#8594; <strong>Pods</strong>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Next to the <code>Project:</code> dropdown in the top left, ensure <code>my-aap</code> is the project shown.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>In the filter text box, enter <code>automation-job</code>.</p>
+</li>
+<li>
+<p>Click on the <code>automation-job-&lt;id&gt;-&lt;guid&gt;</code> pod.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aap-job-pods.png" alt="Job Pods">
+</div>
+</div>
+</li>
+<li>
+<p>Observe the labels attached to this pod under <code>Labels</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>You will see the pod has an additional label <code>my_label=foobar</code> as a reslt of the change we performed within the container group YAML spec.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aap-container-group-pod.png" alt="AAP Container Group Pod Labels">
+</div>
+</div>
+<div class="paragraph">
+<p>This is a very simple example of modifying the container group specification to customize the Kubernetes pod API request. More advanced examples of customizations a user may make for real-world deployments may be:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Launch job Pods in a separate namespace from the core AAP platform Pods.</p>
+</li>
+<li>
+<p>Modify the resource requests and limits of job Pods.</p>
+</li>
+<li>
+<p>Attach volume mounts to each job Pods request.</p>
+</li>
+<li>
+<p>Edit the affinity or anti-affinity of job Pods to certain OpenShift nodes.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This demonstrates how easy and flexible Container Groups can be to manage AAP automation workloads.</p>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="section4.html">Modify the existing deployment</a></span>
+  <span class="next"><a href="section6.html">Conclusion</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+<script defer src="../../../_/js/vendor/tabs.js"></script>
+<script defer src="../../../_/js/vendor/reading-time.js"></script>
+  </body>
+</html>

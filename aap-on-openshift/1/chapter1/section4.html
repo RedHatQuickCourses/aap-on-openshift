@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Lab Environment :: Product Enablement: Ansible Automation Platform Operator Deployment</title>
+    <title>Modify the existing deployment :: Product Enablement: Ansible Automation Platform Operator Deployment</title>
+    <link rel="prev" href="section3.html">
+    <link rel="next" href="section5.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <link rel="stylesheet" href="../../../_/css/vendor/tabs.css">
@@ -48,7 +50,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="index.html">Lab Environment</a>
+    <a class="nav-link" href="../LABENV/index.html">Lab Environment</a>
   </li>
 </ul>
   </li>
@@ -56,31 +58,31 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../chapter1/index.html">Module 1 Lab 3: Platform - Ansible Automation Platform on OpenShift</a>
+    <a class="nav-link" href="index.html">Module 1 Lab 3: Platform - Ansible Automation Platform on OpenShift</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/section1.html">Introduction: Why AAP on OpenShift?</a>
+    <a class="nav-link" href="section1.html">Introduction: Why AAP on OpenShift?</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/section2.html">Viewing the AAP on OpenShift managed resources</a>
+    <a class="nav-link" href="section2.html">Viewing the AAP on OpenShift managed resources</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/section3.html">Deploy another AAP instance using the AAP Operator</a>
+    <a class="nav-link" href="section3.html">Deploy another AAP instance using the AAP Operator</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="section4.html">Modify the existing deployment</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/section4.html">Modify the existing deployment</a>
+    <a class="nav-link" href="section5.html">Modify the default AAP container group</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/section5.html">Modify the default AAP container group</a>
+    <a class="nav-link" href="section6.html">Conclusion</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/section6.html">Conclusion</a>
+    <a class="nav-link" href="tabs-demo.html">Tabbed code blocks</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/tabs-demo.html">Tabbed code blocks</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/collapsible-demo.html">Collapsible blocks</a>
+    <a class="nav-link" href="collapsible-demo.html">Collapsible blocks</a>
   </li>
 </ul>
   </li>
@@ -151,7 +153,8 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Product Enablement: Ansible Automation Platform Operator Deployment</a></li>
-    <li><a href="index-lab-role.html">Lab Environment</a></li>
+    <li><a href="index.html">Module 1 Lab 3: Platform - Ansible Automation Platform on OpenShift</a></li>
+    <li><a href="section4.html">Modify the existing deployment</a></li>
   </ul>
 </nav>
 </div>
@@ -160,50 +163,111 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Lab Environment</h1>
-<div class="sect1">
-<h2 id="_instructions_to_launch_your_lab_on_the_red_hat_online_learning_role_platform"><a class="anchor" href="#_instructions_to_launch_your_lab_on_the_red_hat_online_learning_role_platform"></a>Instructions to Launch Your Lab on the Red Hat Online Learning (ROLE) Platform</h2>
-<div class="sectionbody">
+<h1 class="page">Modify the existing deployment</h1>
+<div class="paragraph">
+<p>The operator will manage the desired state of the created custom resources.</p>
+</div>
+<div class="paragraph">
+<p>For instance, if changes are manually made to operator managed resources, like Deployments, ConfigMaps, etc, then the operator may override those changes and reapply the desired state according the the deployed <code>AnsibleAutomationPlatform</code>, <code>AutomationController</code>, etc .</p>
+</div>
+<div class="paragraph">
+<p>Likewise, if updates are made to already deployed <code>AnsibleAutomationPlatform</code>, <code>AutomationController</code>, etc, than the operator will reconcile already deployed instances and apply the desired configuration automatically.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s demonstrate this assertion by modifying the already created <code>AnsibleAutomationPlatform</code> custom resource to also deploy an instance of Automation Hub and observe how the AAP deployment gets updated.</p>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Log in</strong> to the <a href="#ROLE-Portal-Links">ROLE platform</a></p>
+<p>Navigate to <strong>Ecosystem</strong> on the left hand navigation &#8594; <strong>Installed Operators</strong>.</p>
 </li>
 <li>
-<p><strong>Search</strong> for the catalog entry: <strong>FIXME Lab Catalog Name</strong>.</p>
+<p>Next to the <code>Project:</code> dropdown in the top left, ensure <code>my-aap</code> is the project shown.</p>
 </li>
 <li>
-<p><strong>Click</strong> on the <strong>Launch</strong> button for the catalog entry in the search results.</p>
+<p>Click on the <code>Ansible Automation Platform</code> operator.</p>
 </li>
 <li>
-<p>On the Course page, <strong>click</strong> the <strong>Lab Environment</strong> tab.</p>
-</li>
-<li>
-<p>Click on the <strong>Create</strong> button on the Lab Environment page to launch the lab.</p>
-</li>
-<li>
-<p>Wait for the lab creation process to complete.</p>
-</li>
-<li>
-<p>When the lab is created, refer to the <strong>SSH Private Key &amp; Instructions</strong> on the page to access your lab.</p>
-</li>
-</ol>
-</div>
-<div class="sect2">
-<h3 id="ROLE-Portal-Links"><a class="anchor" href="#ROLE-Portal-Links"></a>ROLE Portal Links</h3>
+<p>In the toolbar click on <strong>All instances</strong>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>RedHat associates: <a href="https://role.rhu.redhat.com/rol-rhu/app/" target="_blank" rel="noopener">https://role.rhu.redhat.com/rol-rhu/app/</a></p>
+<p>Click on the <strong>aap</strong> named resource.</p>
 </li>
 <li>
-<p>RedHat partners: <a href="https://rol.redhat.com/rol/app" target="_blank" rel="noopener">https://rol.redhat.com/rol/app</a></p>
+<p>Click on the <strong>YAML</strong> toolbar button.</p>
+</li>
+<li>
+<p>In the code entry field, update the <code>spec</code> key to the following:</p>
+<div class="listingblock execute">
+<div class="title">Custom AAP Deployment</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># ... other configuration
+spec:
+  admin_password_secret: my-aap-admin-secret
+  image_pull_policy: IfNotPresent
+  no_log: false
+  redis_mode: standalone
+  route_tls_termination_mechanism: Edge
+  controller:
+    disabled: false
+  eda:
+    disabled: true
+  hub:
+    disabled: false
+    content:
+      replicas: 1
+    file_storage_access_mode: ReadWriteMany
+    file_storage_size: 100Gi
+    file_storage_storage_class: ocs-external-storagecluster-cephfs
+    gunicorn_api_workers: 1
+    gunicorn_content_workers: 1
+    worker:
+      replicas: 1
+  lightspeed:
+    disabled: true
+# ... other configuration</code></pre>
+</div>
+</div>
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p>Click the <strong>Save</strong> button.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The only changes made from the originally deployed instance is the contents contained within the <code>hub</code> key. The status of the <code>AnsibleAutomationPlatform</code> custom resource will change to <code>Status: Running</code> while Automation Hub is deploying.</p>
+</div>
+<div class="paragraph">
+<p>When the status of the <code>AutomationHub</code> custom resource named <code>aap-hub</code> shows <code>Conditions: Database-Ready, Automationhub-API-Ready, Automationhub-Operator-Finished-Execution, Automationhub-Web-Ready, Automationhub-Content-Ready, Automationhub-Worker-Ready, Automationhub-Routes-Ready</code>, the Automation Hub component of AAP should be successfully deployed.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Automation Hub will take about 10 minutes to successfully deploy.
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aap-automationhub-status.png" alt="AutomationHub Status">
 </div>
 </div>
+<div class="paragraph">
+<p>Log into the AAP instance again and see that the Automation Hub component of AAP is now deployed.</p>
 </div>
+<nav class="pagination">
+  <span class="prev"><a href="section3.html">Deploy another AAP instance using the AAP Operator</a></span>
+  <span class="next"><a href="section5.html">Modify the default AAP container group</a></span>
+</nav>
 </article>
   </div>
 </main>
