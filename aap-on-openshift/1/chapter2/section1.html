@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Section 1 :: Product Enablement: Ansible Automation Platform Operator Deployment</title>
+    <title>Lab Setup: Configuring Your Environment :: Product Enablement: Ansible Automation Platform Operator Deployment</title>
     <link rel="prev" href="index.html">
-    <link rel="next" href="../chapter3/index.html">
+    <link rel="next" href="section2.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <link rel="stylesheet" href="../../../_/css/vendor/tabs.css">
@@ -58,11 +58,8 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../chapter1/index.html">Module 1 Lab 3: Platform - Ansible Automation Platform on OpenShift</a>
+    <a class="nav-link" href="../chapter1/index.html">Ansible Automation Platform on OpenShift</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/section1.html">Introduction: Why AAP on OpenShift?</a>
-  </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../chapter1/section2.html">Viewing the AAP on OpenShift managed resources</a>
   </li>
@@ -78,12 +75,6 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../chapter1/section6.html">Conclusion</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/tabs-demo.html">Tabbed code blocks</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter1/collapsible-demo.html">Collapsible blocks</a>
-  </li>
 </ul>
   </li>
 </ul>
@@ -92,26 +83,25 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Module 2 Lab 5: Content - Configuration as Code</a>
+    <a class="nav-link" href="index.html">Configuration as Code</a>
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="section1.html">Section 1</a>
-  </li>
-</ul>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../chapter3/index.html">Chapter 3</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter3/section1.html">Section 1</a>
+    <a class="nav-link" href="section1.html">Lab Setup: Configuring Your Environment</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter3/section2.html">Section 2</a>
+    <a class="nav-link" href="section2.html">Install AAP on OpenShift via Infrastructure as Code</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section3.html">Configuration As Code</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section4.html">Review the Results</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.html">Publish Artifacts</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.html">Conclusion</a>
   </li>
 </ul>
   </li>
@@ -153,8 +143,8 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Product Enablement: Ansible Automation Platform Operator Deployment</a></li>
-    <li><a href="index.html">Module 2 Lab 5: Content - Configuration as Code</a></li>
-    <li><a href="section1.html">Section 1</a></li>
+    <li><a href="index.html">Configuration as Code</a></li>
+    <li><a href="section1.html">Lab Setup: Configuring Your Environment</a></li>
   </ul>
 </nav>
 </div>
@@ -163,26 +153,347 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Section 1</h1>
+<h1 class="page">Lab Setup: Configuring Your Environment</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>We need to build a new Execution Environment with all our required collections including validated collections for <code>infra.aap_configuration</code> and <code>infra.aap_utilities</code> and their requirements. A few steps are needed to accomplish this.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_1_add_required_collections_to_remotes_on_pah"><a class="anchor" href="#_2_1_add_required_collections_to_remotes_on_pah"></a>2.1: Add Required Collections to Remotes on PAH</h3>
+<div class="paragraph">
+<p>Start by synching the required collections in Private Automation Hub.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to <strong>Automation Content</strong> &#8594; <strong>Remotes</strong> and edit <strong>rh-certified</strong></p>
+</li>
+<li>
+<p>Ensure the following collections are specified in the <strong>Requirements file</strong> section:</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You may have additional collections from previous labs, just ensure these are appended to the list:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">collections:
+  - ansible.platform
+  - ansible.controller
+  - ansible.hub
+  - ansible.eda
+  - ansible.posix
+  - kubernetes.core
+  - redhat.openshift</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Go to <strong>Automation Content</strong> &#8594; <strong>Remotes</strong> and edit <strong>validated</strong></p>
+</li>
+<li>
+<p>Ensure the following collections are specified in the <strong>Requirements file</strong> section:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">collections:
+  - infra.aap_configuration
+  - infra.aap_utilities</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Go to <strong>Automation Content</strong> &#8594; <strong>Repositories</strong> and sync both of these repositories</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_2_local_environment_preparation"><a class="anchor" href="#_2_2_local_environment_preparation"></a>2.2: Local Environment Preparation</h3>
+<div class="paragraph">
+<p>Create a new directory called <code>aap-as-code</code> for the resources that will be created within this lab and change into the newly created directory.</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mkdir /projects/aap-as-code
+cd /projects/aap-as-code</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_2_create_a_new_execution_environment"><a class="anchor" href="#_2_2_create_a_new_execution_environment"></a>2.2: Create a new Execution Environment</h3>
+<div class="paragraph">
+<p>Create a new <code>execution-environment.yml</code> file within the <code>aap-as-code</code> directory with the following contents:</p>
+</div>
+<div class="listingblock execute">
+<div class="title">/projects/aap-as-code/execution-environment.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">---
+version: 3
+
+images:
+  base_image:
+    name: aap-aap.{openshift_cluster_ingress_domain}/ansible-automation-platform-26/ee-minimal-rhel9:latest
+
+dependencies:
+  system:
+    - gcc [platform:rpm]
+    - systemd-devel [platform:rpm]
+    - python3.11-devel [platform:rpm]
+  galaxy:
+    collections:
+      - name: ansible.platform
+      - name: ansible.controller
+      - name: ansible.hub
+      - name: ansible.eda
+      - name: ansible.posix
+      - name: infra.aap_configuration
+      - name: infra.aap_utilities
+      - name: redhat.openshift
+      - name: kubernetes.core
+  python:
+    - requests
+    - requests-oauthlib
+    - kubernetes
+  exclude:
+    system:
+      - openshift-clients
+options:
+  package_manager_path: /usr/bin/microdnf
+
+additional_build_steps:
+  prepend_galaxy:
+    - ARG TOKEN
+    - ENV ANSIBLE_GALAXY_SERVER_LIST='published,certified,validated,community'
+    - ENV ANSIBLE_GALAXY_SERVER_CERTIFIED_URL='https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/rh-certified/'
+    - ENV ANSIBLE_GALAXY_SERVER_CERTIFIED_TOKEN=$TOKEN
+    - ENV ANSIBLE_GALAXY_SERVER_VALIDATED_URL='https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/validated/'
+    - ENV ANSIBLE_GALAXY_SERVER_VALIDATED_TOKEN=$TOKEN
+    - ENV ANSIBLE_GALAXY_SERVER_COMMUNITY_URL='https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/community/'
+    - ENV ANSIBLE_GALAXY_SERVER_COMMUNITY_TOKEN=$TOKEN
+    - ENV ANSIBLE_GALAXY_SERVER_PUBLISHED_URL='https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/published/'
+    - ENV ANSIBLE_GALAXY_SERVER_PUBLISHED_TOKEN=$TOKEN
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_3_build_the_execution_environment"><a class="anchor" href="#_2_3_build_the_execution_environment"></a>2.3: Build the Execution Environment</h3>
+<div class="paragraph">
+<p>Build a new execution environment (EE) that will enable the use of Config as Code.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Ensure that the <code>PAH_API_TOKEN</code> environment variable is set within your terminal session so the build process can retrieve the required dependencies. You may need to run: <code>source /projects/env/set_pah_vars.env</code> again.
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log in to your PAH container registry</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman login \
+  aap-aap.{openshift_cluster_ingress_domain}</code></pre>
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Create multiple copies of this section as needed.</p>
+<p>Username: <code>{aap_controller_admin_user}</code></p>
 </li>
 <li>
-<p>Remove any unnecessary sections or chapter pages.</p>
-</li>
-<li>
-<p>Customize the section as appropriate.</p>
-</li>
-<li>
-<p>Ensure that each page contains a manageable amount of content.</p>
+<p>Password: <code>{aap_controller_admin_password}</code></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-output hljs" data-lang="output">Username: admin
+Password:
+Login Succeeded!</code></pre>
+</div>
+</div>
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p>Build the new Execution Environment. It will pull the base from PAH, then add our content.</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ansible-builder build \
+  --tag config_as_code_ee:1.0 \
+  --build-arg TOKEN=${PAH_API_TOKEN} \
+  --verbosity 2<i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>--verbosity 3</code> will produce an extremely detailed amount of debug output but is very useful for viewing all the steps involved.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This will take roughly 7 minutes.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-output hljs" data-lang="output">Running command:
+  podman build -f context/Containerfile -t config_as_code_ee:1.0 --build-arg=TOKEN=631a17b4a900efdc878726c7cbd40ab892fdbb2f context
+Complete! The build context can be found at: /projects/aap-config-as-code/context</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+An error such as the following indicates your PAH environment variables are not set properly and you need to run <code>source /projects/env/set_pah_vars.env</code>:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-output hljs" data-lang="output">ERROR! Error when getting the collection info for ansible.platform from community (https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/community/api) (HTTP Code: 401, Message: Authentication credentials were not provided. Code: not_authenticated)</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Tag the image with <code>podman</code>:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman tag \
+  localhost/config_as_code_ee:1.0 aap-aap.{openshift_cluster_ingress_domain}/config_as_code_ee:1.0</code></pre>
+</div>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman images | grep config_as_code</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-output hljs" data-lang="output">aap-aap.{openshift_cluster_ingress_domain}/config_as_code_ee                                1.0         e950419cd988  7 minutes ago   654 MB
+localhost/config_as_code_ee                                                                            1.0         e950419cd988  7 minutes ago   654 MB</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_4_create_a_secrets_file"><a class="anchor" href="#_2_4_create_a_secrets_file"></a>2.4: Create a Secrets file</h3>
+<div class="paragraph">
+<p>As a best practice, use a separate file to avoid putting any secrets directly in playbooks.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you completed the earlier labs in this module you will already have this file, simply append to it.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock execute">
+<div class="title">/projects/env/secrets.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+ansible_user: '{windows_user}'
+ansible_password: '{windows_password}'
+openshift_username: '{openshift_cluster_admin_username}'
+openshift_password: '{openshift_cluster_admin_password}'
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_5_create_playbook_to_install_aap"><a class="anchor" href="#_2_5_create_playbook_to_install_aap"></a>2.5: Create Playbook to Install AAP</h3>
+<div class="paragraph">
+<p>Create a playbook to call the <code>infra.aap_utilities.aap_ocp_install</code> role with task vars defining vital values:</p>
+</div>
+<div class="listingblock execute">
+<div class="title">/projects/aap-as-code/install_aap.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">---
+- name: Install AAP on OCP
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Include AAP OCP Install role
+      ansible.builtin.include_role:
+        name: infra.aap_utilities.aap_ocp_install
+      vars:
+        aap_ocp_install_connection:
+          host: '{openshift_api_server_url}'
+          username: '{{ openshift_username }}'
+          password: '{{ openshift_password }}'
+          validate_certs: false
+        aap_ocp_install_namespace: aap-as-code
+        aap_ocp_install_operator:
+          channel: "stable-2.6"
+        aap_ocp_install_platform:
+          instance_name: lab
+        aap_ocp_install_controller:
+          install: true
+        aap_ocp_install_eda:
+          install: false
+        aap_ocp_install_hub:
+          install: false
+          file_storage_size: 100Gi
+          file_storage_storage_class: ocs-external-storagecluster-cephfs
+        aap_ocp_install_lightspeed:
+          install: false
+...</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The more components installed at once, the longer it will take. These settings will start with <strong>controller</strong> only and allow you to enable and re-run with more components to iteratively deploy additional components, similar to the lab in Module 1.
+</td>
+</tr>
+</table>
+</div>
+</div>
 <nav class="pagination">
-  <span class="prev"><a href="index.html">Module 2 Lab 5: Content - Configuration as Code</a></span>
-  <span class="next"><a href="../chapter3/index.html">Chapter 3</a></span>
+  <span class="prev"><a href="index.html">Configuration as Code</a></span>
+  <span class="next"><a href="section2.html">Install AAP on OpenShift via Infrastructure as Code</a></span>
 </nav>
 </article>
   </div>

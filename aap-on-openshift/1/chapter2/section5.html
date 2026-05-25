@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Lab Environment :: Product Enablement: Ansible Automation Platform Operator Deployment</title>
+    <title>Publish Artifacts :: Product Enablement: Ansible Automation Platform Operator Deployment</title>
+    <link rel="prev" href="section4.html">
+    <link rel="next" href="section6.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <link rel="stylesheet" href="../../../_/css/vendor/tabs.css">
@@ -48,7 +50,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="index.html">Lab Environment</a>
+    <a class="nav-link" href="../LABENV/index.html">Lab Environment</a>
   </li>
 </ul>
   </li>
@@ -81,25 +83,25 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../chapter2/index.html">Configuration as Code</a>
+    <a class="nav-link" href="index.html">Configuration as Code</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter2/section1.html">Lab Setup: Configuring Your Environment</a>
+    <a class="nav-link" href="section1.html">Lab Setup: Configuring Your Environment</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter2/section2.html">Install AAP on OpenShift via Infrastructure as Code</a>
+    <a class="nav-link" href="section2.html">Install AAP on OpenShift via Infrastructure as Code</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter2/section3.html">Configuration As Code</a>
+    <a class="nav-link" href="section3.html">Configuration As Code</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter2/section4.html">Review the Results</a>
+    <a class="nav-link" href="section4.html">Review the Results</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="section5.html">Publish Artifacts</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter2/section5.html">Publish Artifacts</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="../chapter2/section6.html">Conclusion</a>
+    <a class="nav-link" href="section6.html">Conclusion</a>
   </li>
 </ul>
   </li>
@@ -141,7 +143,8 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Product Enablement: Ansible Automation Platform Operator Deployment</a></li>
-    <li><a href="index-lab-demo.html">Lab Environment</a></li>
+    <li><a href="index.html">Configuration as Code</a></li>
+    <li><a href="section5.html">Publish Artifacts</a></li>
   </ul>
 </nav>
 </div>
@@ -150,80 +153,81 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Lab Environment</h1>
-<div class="sect1">
-<h2 id="_instructions_to_launch_your_lab_on_the_red_hat_demo_platform_rhdp"><a class="anchor" href="#_instructions_to_launch_your_lab_on_the_red_hat_demo_platform_rhdp"></a>Instructions to Launch Your Lab on the Red Hat Demo Platform (RHDP)</h2>
+<h1 class="page">Publish Artifacts</h1>
+<div id="preamble">
 <div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Log in</strong> to the <a href="#RHDP-Portal-Links">RHDP portal</a></p>
-</li>
-<li>
-<p><strong>Search</strong> for the catalog entry: <strong>FIXME Lab Catalog Name</strong>.</p>
-</li>
-<li>
-<p><strong>Click</strong> on the catalog entry in the search results.</p>
-</li>
-<li>
-<p>On the catalog page, <strong>click</strong> the <strong>Order</strong> button.</p>
-</li>
-<li>
-<p><strong>Fill out</strong> the required details in the order form.</p>
-</li>
-<li>
-<p><strong>Review the warning</strong> at the bottom of the form and <strong>check the box</strong> labeled:<br>
-<strong>“I confirm that I understand the above warnings.”</strong></p>
-</li>
-<li>
-<p><strong>Click</strong> the <strong>Order</strong> button to place your lab order.</p>
-</li>
-</ol>
+<div class="paragraph">
+<p>With the proper configurations in place, we can save our work to our Gitea instance.</p>
 </div>
-<div class="sect2">
-<h3 id="_important_notes"><a class="anchor" href="#_important_notes"></a>Important Notes:</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>This lab may take approximately <strong>FIXME minutes</strong> to become ready.</p>
-</li>
-<li>
-<p>You will receive an <strong>email with access details</strong> once your lab environment is ready.</p>
-</li>
-<li>
-<p>You can also <strong>retrieve lab access</strong> directly from the RHDP portal.</p>
-</li>
-</ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_to_access_your_lab_via_the_rhdp_portal"><a class="anchor" href="#_how_to_access_your_lab_via_the_rhdp_portal"></a>How to Access Your Lab via the RHDP Portal:</h3>
+<h3 id="_6_1_create_gitea_repository"><a class="anchor" href="#_6_1_create_gitea_repository"></a>6.1: Create Gitea Repository</h3>
+<div class="paragraph">
+<p>Use the following steps to create a new repository on your Gitea instance.</p>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>On the RHDP portal, <strong>click</strong> on the <strong>Services</strong> option in the left-hand menu.</p>
+<p>Navigate to your <a href="{gitea_console_url}" target="_blank" rel="noopener">Gitea instance</a> and click the <strong>Sign In</strong> button on the upper right hand corner</p>
 </li>
 <li>
-<p><strong>Select your lab</strong> from the listings on the right-hand side of the page to view access details.</p>
+<p>Enter the username and password using the credentials provided from the <a href="#environment-details.adoc" class="xref unresolved" target="_blank" rel="noopener">Environment Details</a> page and click the <strong>Sign In</strong> button</p>
+</li>
+<li>
+<p>In the top left corner, click on the <strong>+</strong> symbol and select <strong>New Repository</strong>.</p>
+</li>
+<li>
+<p>On the New Repository page, enter 'aap-as-code' in the Repository Name field.</p>
+</li>
+<li>
+<p>Leave everything else as default and click on the button at the bottom, <strong>Create Repository</strong>.</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect2">
-<h3 id="RHDP-Portal-Links"><a class="anchor" href="#RHDP-Portal-Links"></a>RHDP Portal Links</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>RedHat associates: <a href="https://demo.redhat.com/" target="_blank" rel="noopener">https://demo.redhat.com/</a></p>
-</li>
-<li>
-<p>RedHat partners: <a href="https://partner.demo.redhat.com/" target="_blank" rel="noopener">https://partner.demo.redhat.com/</a></p>
-</li>
-</ul>
+<h3 id="_6_2_create_gitignore_file"><a class="anchor" href="#_6_2_create_gitignore_file"></a>6.2: Create <code>.gitignore</code> file</h3>
+<div class="paragraph">
+<p>Create a file named <code>.gitignore</code> in the root of your repository with the following content to exclude unnecessary files and directories from being tracked by Git.</p>
+</div>
+<div class="listingblock execute">
+<div class="title">.gitignore</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">context/
+.password
+ansible.cfg
+.ansible/
+.vscode/</code></pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_6_3_push_code_to_repository"><a class="anchor" href="#_6_3_push_code_to_repository"></a>6.3: Push code to repository</h3>
+<div class="paragraph">
+<p>After an empty repository is created on your Gitea, we need to push the collection to the repository.</p>
 </div>
+<div class="paragraph">
+<p>In the section <em>Clone this repository</em>, click the <strong>Copy URL</strong> icon on the far right to copy Gitea repository URL for the <em>HTTPS</em> protocol option.</p>
+</div>
+<div class="paragraph">
+<p>Execute the following commands in the root directory of <code>aap-as-code</code> directory.</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git init
+git switch --create main
+git add --all
+git commit --message "Uploading config on initial commit"
+git remote add origin {gitea_console_url}/{gitea_user}/aap-as-code.git
+git push origin main</code></pre>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="section4.html">Review the Results</a></span>
+  <span class="next"><a href="section6.html">Conclusion</a></span>
+</nav>
 </article>
   </div>
 </main>
