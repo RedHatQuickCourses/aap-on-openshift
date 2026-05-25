@@ -1,0 +1,9 @@
+= Review the Results
+
+Once the playbook has completed successfully, navigate to link:https://lab-aap-as-code.{openshift_cluster_ingress_domain}[AAP,window=_blank] to review the configurations that have been applied.
+
+. Navigate to *Automation Controller* -> *Infrastructure* -> *Credentials* you should see the *Windows* credential
+. Navigate to *Automation Controller* -> *Infrastructure* -> *Inventories* and you should see *super-lab*
+* Select this inventory then *Hosts* tab
+* Select *Windows* and review the variables which will match what was defined in the `lab.yml`
+* Feel free to run `win_ping` module using the credential to verify

@@ -1,6 +1,226 @@
-= Section 1
+= Lab Setup: Configuring Your Environment
 
-* Create multiple copies of this section as needed.
-* Remove any unnecessary sections or chapter pages.
-* Customize the section as appropriate.
-* Ensure that each page contains a manageable amount of content.
+We need to build a new Execution Environment with all our required collections including validated collections for `infra.aap_configuration` and `infra.aap_utilities` and their requirements. A few steps are needed to accomplish this.
+
+=== 2.1: Add Required Collections to Remotes on PAH
+
+Start by synching the required collections in Private Automation Hub.
+
+. Go to *Automation Content* -> *Remotes* and edit *rh-certified*
+. Ensure the following collections are specified in the *Requirements file* section:
++
+NOTE: You may have additional collections from previous labs, just ensure these are appended to the list:
++
+[source,yaml,role=execute,subs="verbatim,attributes"]
+----
+collections:
+  - ansible.platform
+  - ansible.controller
+  - ansible.hub
+  - ansible.eda
+  - ansible.posix
+  - kubernetes.core
+  - redhat.openshift
+----
++
+. Go to *Automation Content* -> *Remotes* and edit *validated*
+. Ensure the following collections are specified in the *Requirements file* section:
++
+[source,yaml,role=execute,subs="verbatim,attributes"]
+----
+collections:
+  - infra.aap_configuration
+  - infra.aap_utilities
+----
+. Go to *Automation Content* -> *Repositories* and sync both of these repositories
+
+=== 2.2: Local Environment Preparation
+
+Create a new directory called `aap-as-code` for the resources that will be created within this lab and change into the newly created directory.
+
+[source,bash,role=execute,subs="verbatim,attributes"]
+----
+mkdir /projects/aap-as-code
+cd /projects/aap-as-code
+----
+
+=== 2.2: Create a new Execution Environment
+
+Create a new `execution-environment.yml` file within the `aap-as-code` directory with the following contents:
+
+[source,bash,role=execute,subs="verbatim,attributes",title="/projects/aap-as-code/execution-environment.yml"]
+----
+---
+version: 3
+
+images:
+  base_image:
+    name: aap-aap.{openshift_cluster_ingress_domain}/ansible-automation-platform-26/ee-minimal-rhel9:latest
+
+dependencies:
+  system:
+    - gcc [platform:rpm]
+    - systemd-devel [platform:rpm]
+    - python3.11-devel [platform:rpm]
+  galaxy:
+    collections:
+      - name: ansible.platform
+      - name: ansible.controller
+      - name: ansible.hub
+      - name: ansible.eda
+      - name: ansible.posix
+      - name: infra.aap_configuration
+      - name: infra.aap_utilities
+      - name: redhat.openshift
+      - name: kubernetes.core
+  python:
+    - requests 
+    - requests-oauthlib
+    - kubernetes
+  exclude:
+    system:
+      - openshift-clients
+options:
+  package_manager_path: /usr/bin/microdnf
+
+additional_build_steps:
+  prepend_galaxy:
+    - ARG TOKEN
+    - ENV ANSIBLE_GALAXY_SERVER_LIST='published,certified,validated,community'
+    - ENV ANSIBLE_GALAXY_SERVER_CERTIFIED_URL='https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/rh-certified/'
+    - ENV ANSIBLE_GALAXY_SERVER_CERTIFIED_TOKEN=$TOKEN
+    - ENV ANSIBLE_GALAXY_SERVER_VALIDATED_URL='https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/validated/'
+    - ENV ANSIBLE_GALAXY_SERVER_VALIDATED_TOKEN=$TOKEN
+    - ENV ANSIBLE_GALAXY_SERVER_COMMUNITY_URL='https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/community/'
+    - ENV ANSIBLE_GALAXY_SERVER_COMMUNITY_TOKEN=$TOKEN
+    - ENV ANSIBLE_GALAXY_SERVER_PUBLISHED_URL='https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/published/'
+    - ENV ANSIBLE_GALAXY_SERVER_PUBLISHED_TOKEN=$TOKEN
+...
+----
+
+=== 2.3: Build the Execution Environment
+
+Build a new execution environment (EE) that will enable the use of Config as Code.
+
+NOTE: Ensure that the `PAH_API_TOKEN` environment variable is set within your terminal session so the build process can retrieve the required dependencies. You may need to run: `source /projects/env/set_pah_vars.env` again.
+
+. Log in to your PAH container registry
++
+[source,bash,role=execute,subs="verbatim,attributes"]
+----
+podman login \
+  aap-aap.{openshift_cluster_ingress_domain}
+----
++
+* Username: `{aap_controller_admin_user}`
+* Password: `{aap_controller_admin_password}`
++
+[source,output]
+----
+Username: admin
+Password: 
+Login Succeeded!
+----
++
+. Build the new Execution Environment. It will pull the base from PAH, then add our content.
++
+[source,bash,role=execute,subs="verbatim,attributes,callouts"]
+----
+ansible-builder build \
+  --tag config_as_code_ee:1.0 \
+  --build-arg TOKEN=$\{PAH_API_TOKEN\} \
+  --verbosity 2<1>
+----
+<1> `--verbosity 3` will produce an extremely detailed amount of debug output but is very useful for viewing all the steps involved.
++
+NOTE: This will take roughly 7 minutes.
++
+
+[source,output]
+----
+Running command:
+  podman build -f context/Containerfile -t config_as_code_ee:1.0 --build-arg=TOKEN=631a17b4a900efdc878726c7cbd40ab892fdbb2f context
+Complete! The build context can be found at: /projects/aap-config-as-code/context
+----
++
+NOTE: An error such as the following indicates your PAH environment variables are not set properly and you need to run `source /projects/env/set_pah_vars.env`:
++
+[source,output]
+----
+ERROR! Error when getting the collection info for ansible.platform from community (https://aap-aap.{openshift_cluster_ingress_domain}/pulp_ansible/galaxy/community/api) (HTTP Code: 401, Message: Authentication credentials were not provided. Code: not_authenticated)
+----
++
+. Tag the image with `podman`:
++
+[source,bash,role=execute,subs="verbatim,attributes"]
+----
+podman tag \
+  localhost/config_as_code_ee:1.0 aap-aap.{openshift_cluster_ingress_domain}/config_as_code_ee:1.0
+----
++
+[source,bash,role=execute,subs="verbatim,attributes"]
+----
+podman images | grep config_as_code
+----
++
+[source,output]
+----
+aap-aap.{openshift_cluster_ingress_domain}/config_as_code_ee                                1.0         e950419cd988  7 minutes ago   654 MB
+localhost/config_as_code_ee                                                                            1.0         e950419cd988  7 minutes ago   654 MB
+----
+
+=== 2.4: Create a Secrets file
+
+As a best practice, use a separate file to avoid putting any secrets directly in playbooks.
+
+NOTE: If you completed the earlier labs in this module you will already have this file, simply append to it.
+
+[source,yaml,role=execute,subs="verbatim,attributes",title="/projects/env/secrets.yml"]
+----
+---
+ansible_user: '{windows_user}'
+ansible_password: '{windows_password}'
+openshift_username: '{openshift_cluster_admin_username}'
+openshift_password: '{openshift_cluster_admin_password}'
+...
+----
+
+=== 2.5: Create Playbook to Install AAP
+
+Create a playbook to call the `infra.aap_utilities.aap_ocp_install` role with task vars defining vital values:
+
+[source,bash,role=execute,subs="verbatim,attributes",title="/projects/aap-as-code/install_aap.yml"]
+----
+---
+- name: Install AAP on OCP
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Include AAP OCP Install role
+      ansible.builtin.include_role:
+        name: infra.aap_utilities.aap_ocp_install
+      vars:
+        aap_ocp_install_connection:
+          host: '{openshift_api_server_url}'
+          username: '{{ openshift_username }}'
+          password: '{{ openshift_password }}'
+          validate_certs: false
+        aap_ocp_install_namespace: aap-as-code
+        aap_ocp_install_operator:
+          channel: "stable-2.6"
+        aap_ocp_install_platform:
+          instance_name: lab
+        aap_ocp_install_controller:
+          install: true
+        aap_ocp_install_eda:
+          install: false
+        aap_ocp_install_hub:
+          install: false
+          file_storage_size: 100Gi
+          file_storage_storage_class: ocs-external-storagecluster-cephfs
+        aap_ocp_install_lightspeed:
+          install: false
+...
+----
+
+NOTE: The more components installed at once, the longer it will take. These settings will start with *controller* only and allow you to enable and re-run with more components to iteratively deploy additional components, similar to the lab in Module 1.

@@ -1,0 +1,210 @@
+= Configuration As Code
+
+Config as Code leverages standard Ansible variable files containing properties that will be used to drive the configuration of AAP. These variables include all the typical objects usually configured manually via ClickOps, organizations, inventories, hosts, projects, and other items that each have a role contained within the Config as Code collection that will configure these through modules.
+
+=== 4.1: Define Secrets
+
+The best practice is to use `ansible-vault` to encrypt files. For this lab we will keep our secrets in the same file we have been using for simplicity.
+
+. Append the following variables to the `/projects/env/secrets.yml` file:
++
+[source,yaml,role=execute,subs="verbatim,attributes,callouts",title="/projects/env/secrets.yml"]
+----
+aap_username: admin
+aap_password: PASSWORD_FROM_OPENSHIFT<1>
+----
+<1> Obtain this random password from *OpenShift* -> *Workloads* -> *Secrets*.
+
+=== 4.2: Define Environment Variables File
+
+Since we already have a few AAP deployments on OpenShift, we can consider these different namespaces each a different AAP environment, with different URLs, secrets and resources for each deployment. For now let's create one for this environment.
+
+. Create a new variable file to represent this environment. This would typically be handled by inventory `group_vars` or separate `vars_files`, but for this lab we'll simplify to a single file. Place this file in the same directory `/projects/aap-as-code/`:
++
+[source,yaml,role=execute,subs="verbatim,attributes",title="/projects/aap-as-code/lab.yml"]
+----
+---
+aap_hostname: 'lab-aap-as-code.{openshift_cluster_ingress_domain}'<1>
+aap_validate_certs: false
+----
+<1> Verify this is the correct hostname that was just deployed or modify as needed.
+
+=== 4.3: Define some Configuration
+
+Define a few objects as specified below in the data structure. Append the following to the environment variable file:
+
+[source,yaml,role=execute,subs="verbatim,attributes",title="/projects/aap-as-code/lab.yml"]
+----
+aap_organizations:
+  - name: config_as_code
+aap_teams:
+  - name: config as code team
+    description: config as code team
+    organization: config_as_code
+controller_inventories:
+  - name: super-lab
+    organization: config_as_code
+controller_hosts:
+  - name: "Windows"
+    inventory: "super-lab"
+    variables:
+      ansible_host: windows.aap.svc.cluster.local
+      ansible_connection: psrp
+      ansible_psrp_auth: negotiate
+      ansible_psrp_cert_validation: ignore
+    enabled: true
+controller_credentials:
+  - name: Windows
+    description: Administrator user
+    credential_type: Machine
+    inputs:
+      username: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+----
+
+=== 4.4: Create a playbook to apply the configuration
+
+Create a simple playbook to call the `inra.aap_configuration.dispatch` role which will evaluate the variables defined and call the appropriate roles in the proper order based on precedence.
+
+[source,yaml,role=execute,subs="verbatim,attributes",title="/projects/aap-as-code/configure_aap.yml"]
+----
+---
+- name: Playbook to configure AAP
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Call dispatch role
+      ansible.builtin.include_role:
+        name: infra.aap_configuration.dispatch
+...
+----
+
+=== 4.5: Run Configuration as Code Playbook
+
+Run a similar command to what was used earlier in this lab to run the `install_aap.yml` playbook, but this time also attach the new environment file via a volume mount:
+
+[source,yaml,role=execute,subs="verbatim,attributes"]
+----
+ansible-navigator run  \
+  --execution-environment-image aap-aap.{openshift_cluster_ingress_domain}/config_as_code_ee:1.0 \
+  --mode stdout  \
+  configure_aap.yml \
+  --extra-vars @/projects/env/secrets.yml \
+  --execution-environment-volume-mounts /projects/env:/projects/env:Z \
+  --extra-vars @lab.yml \
+  --execution-environment-volume-mounts $(pwd)/lab.yml:lab.yml:Z
+----
+
+WARNING: This is expected to fail. Review the output. If you look closely, some objects were created but ultimately it fails as follows:
+
+[source,output,subs="verbatim,attributes,callouts"]
+----
+TASK [infra.aap_configuration.collect_async_status : Create/Update Credential Windows | Wait for finish the credential creation] ***
+FAILED - RETRYING: [localhost]: Create/Update Credential Windows | Wait for finish the credential creation (50 retries left).
+fatal: [localhost]: FAILED! => {"attempts": 2, "censored": "the output has been hidden due to the fact that 'no_log: true' was specified for this result", "changed": false}<1>
+...ignoring
+
+TASK [infra.aap_configuration.collect_async_status : Register value] ***********
+ok: [localhost]
+
+TASK [infra.aap_configuration.collect_async_status : Handle Async Job Failure] ***
+included: /usr/share/ansible/collections/ansible_collections/infra/aap_configuration/roles/collect_async_status/tasks/handle_error.yml for localhost => (item=(censored due to no_log))
+
+TASK [infra.aap_configuration.collect_async_status : handle_error | Show error and stop execution] ***
+fatal: [localhost]: FAILED! => {"censored": "the output has been hidden due to the fact that 'no_log: true' was specified for this result", "changed": false}
+
+TASK [infra.aap_configuration.controller_credentials : Cleanup async results files] ***
+ok: [localhost] => (item=None)
+ok: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=22   changed=0    unreachable=0    failed=1    skipped=9    rescued=0    ignored=1   
+Please review the log for errors.
+----
+<1> This is the failure but the details are hidden.
+
+Check the AAP UI to see what worked and what didn't. The next section goes into troubleshooting steps.
+
+=== 4.6: Verify Run
+
+Verify what did work.
+
+. Navigate to *Access Management* -> *Organizations* you should see the *config_as_code*
+. Navigate to *Access Management* -> *Teams* you should see the *config_as_code*
+. Navigate to *Automation Controller* -> *Infrastructure* -> *Credentials* there will NOT be a new credential created
+. Navigate to *Automation Controller* -> *Infrastructure* -> *Inventories* no inventory or hosts were created either.
+
+=== 4.7: Troubleshoot Failed Runs
+
+The first time this playbook runs it will fail. By default you cannot see why because of secure logging. However, you get a clue by the failed `controller_credentials` task. If you read the readme for this role, you will see a section on how to disable secure logging. Add these two variables to the `lab.yml` environment file:
+
+. View the role documentation for `controller_credential` at https://console.redhat.com/ansible/automation-hub/repo/validated/infra/aap_configuration/content/role/controller_credentials/
+. Read the *Secure Logging Variables* section and define the two mentioned variables in that section.
+. Append the following anywhere in the `lab.yml` file:
++
+[source,yaml,role=execute,subs="verbatim,attributes",title="/projects/aap-as-code/lab.yml"]
+----
+...
+controller_configuration_credentials_secure_logging: false
+aap_configuration_secure_logging: false
+...
+----
++
+. Run the playbok again and this time scroll up and look more closely at the output:
++
+[source,output,subs="verbatim,attributes,callouts"]
+----
+TASK [infra.aap_configuration.collect_async_status : Create/Update Credential Windows | Wait for finish the credential creation] ***
+FAILED - RETRYING: [localhost]: Create/Update Credential Windows | Wait for finish the credential creation (50 retries left).
+fatal: [localhost]: FAILED! => {"ansible_job_id": "j920878083329.281", "attempts": 2, "changed": false, "finished": 1, "msg": "Unable to create credential Windows: {'detail': [\"Missing 'user', 'team', or 'organization'.\"]}", "results_file": "/root/.ansible_async/j920878083329.281", "started": 1, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}<1>
+...ignoring
+
+TASK [infra.aap_configuration.collect_async_status : Register value] ***********
+ok: [localhost]
+
+TASK [infra.aap_configuration.collect_async_status : Handle Async Job Failure] ***
+included: /usr/share/ansible/collections/ansible_collections/infra/aap_configuration/roles/collect_async_status/tasks/handle_error.yml for localhost => (item=(censored due to no_log))
+
+TASK [infra.aap_configuration.collect_async_status : handle_error | Show error and stop execution] ***
+fatal: [localhost]: FAILED! => {"changed": false, "msg": "error: Unable to create credential Windows: {'detail': [\"Missing 'user', 'team', or 'organization'.\"]}"}
+
+TASK [infra.aap_configuration.controller_credentials : Cleanup async results files] ***
+ok: [localhost] => (item=Cleaning up job results file: /root/.ansible_async/j920878083329.281)
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=22   changed=0    unreachable=0    failed=1    skipped=9    rescued=0    ignored=1   
+Please review the log for errors.
+----
+<1> Now we can see the actual error.
++
+. Fix the issue by adding an `organization` definition to the credential:
++
+[source,yaml,role=execute,subs="verbatim,attributes,callouts",title="/projects/aap-as-code/lab.yml"]
+----
+...
+controller_credentials:
+  - name: Windows
+    description: Administrator user
+    credential_type: Machine
+    organization: config_as_code<1>
+    inputs:
+      username: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+----
+<1> This is the only change that is needed.
++
+. Run the playbook again:
++
+[source,yaml,role=execute,subs="verbatim,attributes"]
+----
+ansible-navigator run  
+  --execution-environment-image aap-aap.{openshift_cluster_ingress_domain}/config_as_code_ee:1.0 \
+  --mode stdout  \
+  configure_aap.yml \
+  --extra-vars @/projects/env/secrets.yml \
+  --execution-environment-volume-mounts /projects/env:/projects/env:Z \
+  --extra-vars @lab.yml \
+  --execution-environment-volume-mounts $(pwd)/lab.yml:lab.yml:Z
+----
++
+TIP: If an errors occurs during the execution with a message similar to  "Failed to get token: HTTP Error 401: Unauthorized" while other tasks pass, please rerun the playbook. this is a known issue within the collection.

@@ -1,0 +1,45 @@
+= Publish Artifacts
+
+With the proper configurations in place, we can save our work to our Gitea instance.
+
+=== 6.1: Create Gitea Repository
+
+Use the following steps to create a new repository on your Gitea instance.
+
+. Navigate to your link:{gitea_console_url}[Gitea instance,window=_blank] and click the **Sign In** button on the upper right hand corner
+. Enter the username and password using the credentials provided from the xref:environment-details.adoc[Environment Details,window=_blank] page and click the **Sign In** button
+. In the top left corner, click on the **+** symbol and select **New Repository**.
+. On the New Repository page, enter 'aap-as-code' in the Repository Name field.
+. Leave everything else as default and click on the button at the bottom, **Create Repository**.
+
+=== 6.2: Create `.gitignore` file
+
+Create a file named `.gitignore` in the root of your repository with the following content to exclude unnecessary files and directories from being tracked by Git.
+
+[source,bash,role=execute,subs="verbatim,attributes",title=".gitignore"]
+----
+context/
+.password
+ansible.cfg
+.ansible/
+.vscode/
+
+----
+
+=== 6.3: Push code to repository
+
+After an empty repository is created on your Gitea, we need to push the collection to the repository.
+
+In the section _Clone this repository_, click the **Copy URL** icon on the far right to copy Gitea repository URL for the _HTTPS_ protocol option.
+
+Execute the following commands in the root directory of `aap-as-code` directory.
+
+[source,bash,role=execute,subs="verbatim,attributes"]
+----
+git init
+git switch --create main
+git add --all
+git commit --message "Uploading config on initial commit"
+git remote add origin {gitea_console_url}/{gitea_user}/aap-as-code.git
+git push origin main
+----
