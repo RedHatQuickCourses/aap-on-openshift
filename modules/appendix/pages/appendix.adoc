@@ -1,3 +1,14 @@
 = Appendix
 
-FIXME: Content for Appendix...
+For additional reference and deeper learning related to AAP on OpenShift and Configuration as Code:
+
+. https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/deploying_the_red_hat_ansible_automation_platform_operator_on_openshift/index[AAP Operator Deployment Guide]
+. https://docs.openshift.com/container-platform/latest/operators/understanding/olm/olm-understanding-olm.html[OpenShift Operator Lifecycle Manager]
+. https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/red_hat_ansible_automation_platform_installation_guide/index[Ansible Automation Platform Installation Guide]
+. https://kubernetes.io/docs/concepts/extend-kubernetes/operator/[Kubernetes Operators]
+
+. https://github.com/redhat-cop/infra.aap_configuration[infra.aap_configuration Collection]
+. https://console.redhat.com/ansible/automation-hub/repo/validated/infra/aap_configuration/content/role/gateway_organizations/
+. https://console.redhat.com/ansible/automation-hub/repo/validated/infra/aap_configuration/content/role/controller_teams/
+. https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/red_hat_ansible_automation_platform_installation_guide/index[Ansible Automation Platform Installation Guide]
+. https://docs.ansible.com/ansible/latest/collections_guide/index.html[Ansible Collections Guide]

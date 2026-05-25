@@ -1,0 +1,81 @@
+= Modify the default AAP container group
+
+The operator deployed AAP instance is pre-configured with a default link:https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/using_automation_execution/controller-instance-and-container-groups#controller-container-groups[Container Group,window=_blank]. A container group is an instance group that points to an OpenShift cluster. In this case, the OpenShift cluster that the operator was installed on.
+
+By default, the container group is setup to deploy job pods in the same namespace that the `AnsibleAutomationPlatform` custom resource was created within.
+
+AAP allows you to edit the default container group, or create new ones, and modify the Kubernetes request that AAP makes for each job execution.
+
+Before we modify the container group, let's make a slight configuration change to the AAP deployment that will allow job containers to persist after running. This change allows us to observe the state of job pods after they have completed.
+
+. Log into the link:https://aap-my-aap.{openshift_cluster_ingress_domain}[deployed AAP instance,window=_blank].
+. From the navigation menu on the left, expand **Settings** and expand **Automation Execution** and click on **Troubleshooting**.
++
+image::aap-settings-troubleshooting.png[AAP Automation Execution Settings]
++
+. Click on the **Edit** button.
+. Uncheck the **Release Receptor Work** checkbox.
+. Click the **Save** button.
+
+image::aap-receptor-work.png[AAP Receptor Work Setting]
+
+Now, perform a small modification to the to the default container group on the deployed AAP instance.
+
+. From the navigation menu on the left, expand **Automation Execution** and expand **Infrastructure** and click on **Instance Groups**.
++
+image::aap-instance-groups.png[AAP Instance Groups]
++
+. Click on the **default** container group.
+. Click the **Edit container group** button.
+. Check the **Customize pod spec** option.
+. A `Pod spec override` text box appear once the _Customize pod spec_ option is checked with a lengthy YAML snippet. This represents spec for the Kubernetes API request that is made by AAP each time a job pod is launched. Let's modify the spec slightly to add a custom label to each job pod.
+. Edit the `metadata` key to appear similar to the following:
++
+[source,yaml,role=execute,subs="verbatim,attributes,callouts",title="Custom AAP Deployment"]
+----
+# ... other configuration
+metadata:
+  namespace: my-aap
+  labels:
+    ansible_job: ''
+    my_label: foobar<1>
+# ... other configuration
+----
+<1> Add this line to the metadata key.
++
+. Click the **Save container group** button.
++
+image::aap-edit-instance-group.png[Update Default Instance Group]
++
+. With the default instance group updated, let's run a demo job and observe the job pod that is launched.
+. From the navigation menu on the left, expand **Automation Execution** and click on **Templates**.
+. Click on **Demo Job Template**.
+. Click the **Launch template** button (rocket icon).
+. Wait for the job to complete.
+
+NOTE: If the Job completes successfully, an OpenShift pod was launched and the ansible playbook was successfully executed within it. Normally, this pod would be terminated and removed upon success of the Job by AAP. However, because we unchecked the `Release Receptor Work` option previously, this pod will not be removed and will still be available for inspection as needed.
+
+Let's observe the created job pod in the OpenShift Web Console.
+
+. Navigate back to the OpenShift web console.
+. Navigate to **Workloads** on the left hand navigation -> **Pods**.
+* Next to the `Project:` dropdown in the top left, ensure `my-aap` is the project shown.
+. In the filter text box, enter `automation-job`.
+. Click on the `automation-job-<id>-<guid>` pod.
++
+image::aap-job-pods.png[Job Pods]
++
+. Observe the labels attached to this pod under `Labels`.
+
+You will see the pod has an additional label `my_label=foobar` as a reslt of the change we performed within the container group YAML spec.
+
+image::aap-container-group-pod.png[AAP Container Group Pod Labels]
+
+This is a very simple example of modifying the container group specification to customize the Kubernetes pod API request. More advanced examples of customizations a user may make for real-world deployments may be:
+
+. Launch job Pods in a separate namespace from the core AAP platform Pods.
+. Modify the resource requests and limits of job Pods.
+. Attach volume mounts to each job Pods request.
+. Edit the affinity or anti-affinity of job Pods to certain OpenShift nodes.
+
+This demonstrates how easy and flexible Container Groups can be to manage AAP automation workloads.
