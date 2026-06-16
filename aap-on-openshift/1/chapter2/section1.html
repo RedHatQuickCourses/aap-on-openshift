@@ -316,10 +316,10 @@ Ensure that the <code>PAH_API_TOKEN</code> environment variable is set within yo
 <div class="ulist">
 <ul>
 <li>
-<p>Username: <code>{aap_controller_admin_user}</code></p>
+<p>Username: <code>{aap_username}</code></p>
 </li>
 <li>
-<p>Password: <code>{aap_controller_admin_password}</code></p>
+<p>Password: <code>{aap_password}</code></p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-output hljs" data-lang="output">Username: admin
@@ -430,10 +430,8 @@ If you completed the earlier labs in this module you will already have this file
 <div class="title">/projects/env/secrets.yml</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-ansible_user: '{windows_user}'
-ansible_password: '{windows_password}'
-openshift_username: '{openshift_cluster_admin_username}'
-openshift_password: '{openshift_cluster_admin_password}'
+openshift_username: '{ocp4_workload_authentication_htpasswd_admin_user}'
+openshift_password: '{ocp4_workload_authentication_htpasswd_admin_password}'
 ...</code></pre>
 </div>
 </div>
