@@ -399,9 +399,9 @@ An error such as the following indicates your PAH environment variables are not 
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman images | grep config_as_code</code></pre>
 </div>
 </div>
-<div class="listingblock">
+<div class="listingblock execute">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-output hljs" data-lang="output">aap-aap.{openshift_cluster_ingress_domain}/config_as_code_ee                                1.0         e950419cd988  7 minutes ago   654 MB
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">aap-aap.{openshift_cluster_ingress_domain}/config_as_code_ee                                1.0         e950419cd988  7 minutes ago   654 MB
 localhost/config_as_code_ee                                                                            1.0         e950419cd988  7 minutes ago   654 MB</code></pre>
 </div>
 </div>
@@ -454,7 +454,7 @@ openshift_password: '{ocp4_workload_authentication_htpasswd_admin_password}'
         name: infra.aap_utilities.aap_ocp_install
       vars:
         aap_ocp_install_connection:
-          host: '{openshift_api_server_url}'
+          host: '{openshift_api_url}'
           username: '{{ openshift_username }}'
           password: '{{ openshift_password }}'
           validate_certs: false
