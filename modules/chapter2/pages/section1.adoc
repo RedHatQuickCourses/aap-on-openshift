@@ -163,7 +163,7 @@ podman tag \
 podman images | grep config_as_code
 ----
 +
-[source,output]
+[source,yaml,role=execute]
 ----
 aap-aap.{openshift_cluster_ingress_domain}/config_as_code_ee                                1.0         e950419cd988  7 minutes ago   654 MB
 localhost/config_as_code_ee                                                                            1.0         e950419cd988  7 minutes ago   654 MB
@@ -199,7 +199,7 @@ Create a playbook to call the `infra.aap_utilities.aap_ocp_install` role with ta
         name: infra.aap_utilities.aap_ocp_install
       vars:
         aap_ocp_install_connection:
-          host: '{openshift_api_server_url}'
+          host: '{openshift_api_url}'
           username: '{{ openshift_username }}'
           password: '{{ openshift_password }}'
           validate_certs: false
