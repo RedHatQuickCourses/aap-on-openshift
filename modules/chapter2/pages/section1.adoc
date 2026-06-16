@@ -112,8 +112,8 @@ podman login \
   aap-aap.{openshift_cluster_ingress_domain}
 ----
 +
-* Username: `{aap_controller_admin_user}`
-* Password: `{aap_controller_admin_password}`
+* Username: `{aap_username}`
+* Password: `{aap_password}`
 +
 [source,output]
 ----
@@ -178,10 +178,8 @@ NOTE: If you completed the earlier labs in this module you will already have thi
 [source,yaml,role=execute,subs="verbatim,attributes",title="/projects/env/secrets.yml"]
 ----
 ---
-ansible_user: '{windows_user}'
-ansible_password: '{windows_password}'
-openshift_username: '{openshift_cluster_admin_username}'
-openshift_password: '{openshift_cluster_admin_password}'
+openshift_username: '{ocp4_workload_authentication_htpasswd_admin_user}'
+openshift_password: '{ocp4_workload_authentication_htpasswd_admin_password}'
 ...
 ----
 

@@ -51,7 +51,7 @@ localhost                  : ok=34   changed=0    unreachable=0    failed=0    s
 
 Once the playbook completes, verify that the AAP components are running in OpenShift.
 
-. Launch the link:{openshift_cluster_console_url}[OpenShift Web Console,window=_blank]
+. Launch the link:https://console-openshift-console.{openshift_cluster_ingress_domain}[OpenShift Web Console,window=_blank]
 . Navigate to **Ecosystem** on the left hand navigation -> **Installed Operators**.
 . Next to the `Project:` dropdown in the top left, ensure `aap-as-code` is the project shown.
 . Click on the `Ansible Automation Platform` operator.
