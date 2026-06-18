@@ -3,7 +3,7 @@
 
 == Overview
 
-The Ansible Automation Platform Operator Deployment provides a comprehensive, hands-on learning experience for Red Hat Ansible Automation Platform (AAP). This lab covers the full spectrum of automation development, from basic concepts to advanced CI/CD pipelines, infrastructure as code, Event Driven Ansible and lastly an exploration of some of the AI integration within Ansible Automation Platform.
+The Ansible Automation Platform Operator provides cloud-native, push-button deployment of new Ansible Automation Platform instances in your OpenShift environment and this lab covers the full spectrum of automation development where we will explore how to manage Ansible Automation Platform (AAP) configurations declaratively as code using Ansible playbooks and the infra.aap_configuration and infra.aap_utilities collections. instead of manually configuring settings through the AAP user interface (ClickOps).
 
 == Prerequisites
 

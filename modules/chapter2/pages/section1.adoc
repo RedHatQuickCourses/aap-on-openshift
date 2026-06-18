@@ -1,4 +1,4 @@
-= Lab Setup: Configuring Your Environment
+= Configuring Your Environment
 
 We need to build a new Execution Environment with all our required collections including validated collections for `infra.aap_configuration` and `infra.aap_utilities` and their requirements. A few steps are needed to accomplish this.
 
